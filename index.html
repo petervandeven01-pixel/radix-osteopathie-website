@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radix Osteopathie</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --main:#294C52;
+    --main-dark:#1d373c;
+    --sand:#E8DED0;
+    --light:#F8F5F0;
+    --copper:#A06D4E;
+    --copper-soft:#C99A78;
+    --ink:#262626;
+    --muted:#6b7c80;
+    --serif:'Lora', Georgia, serif;
+    --sans:'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--light);
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  section{position:relative;}
+
+  /* ---------- shared bits ---------- */
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--copper);
+    margin:0 0 18px;
+  }
+  h1,h2,h3{
+    font-family:var(--serif);
+    color:var(--main);
+    font-weight:600;
+    margin:0;
+    line-height:1.15;
+  }
+  .lede{
+    font-size:18px;
+    line-height:1.65;
+    color:#3c4748;
+    max-width:46ch;
+    margin:20px 0 0;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 28px;
+    border-radius:2px;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.01em;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--main);color:var(--light);}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 24px -10px rgba(41,76,82,.55);}
+  .btn-ghost{color:var(--main);border-bottom:1px solid var(--copper);padding:14px 0;}
+  .btn-ghost:hover{color:var(--copper);}
+
+  .mark{display:inline-block;}
+  .divider{
+    width:46px;height:1px;background:var(--copper);border:none;margin:0;
+  }
+
+  /* photo placeholder */
+  .photo-ph{
+    background:linear-gradient(155deg, var(--sand), #f1e9dd);
+    border:1px solid rgba(41,76,82,.12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;color:var(--main);
+    gap:10px;
+    padding:24px;
+  }
+  .photo-ph svg{opacity:.55;}
+  .photo-ph span{
+    font-family:var(--serif);font-style:italic;font-size:14px;color:#5a6e72;max-width:220px;
+  }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(248,245,240,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(41,76,82,.10);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 32px;max-width:1180px;margin:0 auto;
+  }
+  .nav-logo svg{height:34px;width:auto;}
+  .nav-links{display:flex;align-items:center;gap:34px;}
+  .nav-links a{
+    font-size:14.5px;font-weight:500;color:var(--main);position:relative;padding:4px 0;
+  }
+  .nav-links a:hover{color:var(--copper);}
+  .nav-cta{background:var(--main);color:var(--light);padding:10px 20px;font-size:14px;font-weight:600;border-radius:2px;}
+  .nav-cta:hover{background:var(--main-dark);}
+  .nav-toggle{
+    display:none;background:none;border:none;padding:8px;margin:-8px;cursor:pointer;
+    width:44px;height:44px;align-items:center;justify-content:center;
+  }
+  .nav-mobile{
+    display:none;flex-direction:column;
+    border-top:1px solid rgba(41,76,82,.10);
+    background:var(--light);
+  }
+  .nav-mobile a{
+    padding:16px 32px;font-size:15.5px;font-weight:500;color:var(--main);
+    border-bottom:1px solid rgba(41,76,82,.08);
+  }
+  .nav-mobile a.nav-cta{
+    margin:16px 32px;text-align:center;border-bottom:none;color:var(--light);
+  }
+  .nav-mobile.open{display:flex;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:88px 0 100px;overflow:hidden;}
+  .hero-grid{
+    display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center;
+  }
+  .hero-watermark{
+    position:absolute; top:34px; left:2px; width:152px; height:95px;
+    opacity:.16; pointer-events:none; z-index:1;
+  }
+  .hero-copy{position:relative;z-index:2;}
+  .hero h1{font-size:46px;max-width:13ch;}
+  .hero-photo{
+    aspect-ratio:4/5; border-radius:2px; position:relative;z-index:2;
+  }
+  .hero-actions{display:flex;align-items:center;gap:28px;margin-top:36px;flex-wrap:wrap;}
+
+  /* ---------- herkenning ---------- */
+  .herkenning{background:var(--main);color:var(--light);padding:80px 0;}
+  .herkenning h2{color:var(--light);font-size:30px;max-width:20ch;}
+  .herkenning .eyebrow{color:var(--copper-soft);}
+  .herkenning-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;margin-top:44px;align-items:start;}
+  .herk-list{display:grid;gap:22px;margin:0;padding:0;list-style:none;}
+  .herk-list li{
+    display:flex;gap:16px;font-size:16.5px;line-height:1.55;color:#dbe6e6;
+    padding-bottom:20px;border-bottom:1px solid rgba(248,245,240,.14);
+  }
+  .herk-list li:last-child{border-bottom:none;}
+  .herk-list .tick{flex:none;color:var(--copper-soft);font-family:var(--serif);font-style:italic;font-size:20px;}
+  .herkenning .lede{color:#cfdcdc;}
+  .herkenning .lede strong{color:#fff;}
+
+  /* ---------- wat is osteopathie ---------- */
+  .uitleg{padding:96px 0;}
+  .uitleg-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:64px;align-items:start;}
+  .uitleg h2{font-size:32px;max-width:14ch;}
+  .uitleg-points{display:grid;gap:28px;margin-top:8px;}
+  .uitleg-point{display:flex;gap:18px;}
+  .uitleg-point .icon{flex:none;width:40px;height:40px;}
+  .uitleg-point h4{font-family:var(--serif);color:var(--main);font-size:17px;margin:0 0 6px;font-weight:600;}
+  .uitleg-point p{margin:0;font-size:15px;line-height:1.6;color:#4a5556;}
+
+  /* ---------- klachten ---------- */
+  .klachten{background:var(--sand);padding:96px 0;}
+  .klachten-head{max-width:640px;}
+  .klachten h2{font-size:32px;}
+  .klachten-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    margin-top:48px;background:rgba(41,76,82,.16);
+    border:1px solid rgba(41,76,82,.16);
+  }
+  .klacht-item{background:var(--light);padding:30px 26px;}
+  .klacht-item h4{font-family:var(--serif);font-size:17px;color:var(--main);margin:0 0 8px;font-weight:600;}
+  .klacht-item p{margin:0;font-size:14px;line-height:1.55;color:#5a6566;}
+  .klachten-note{margin-top:32px;font-size:13.5px;color:#5a6566;max-width:640px;line-height:1.6;}
+
+  /* ---------- werkwijze ---------- */
+  .werkwijze{padding:96px 0;}
+  .werkwijze-head{max-width:560px;margin:0 auto 56px;text-align:center;}
+  .werkwijze h2{font-size:32px;}
+  .werkwijze .lede{margin:18px auto 0;text-align:center;}
+  .stappen{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+  .stap{position:relative;padding:0 22px;text-align:left;}
+  .stap-num{
+    font-family:var(--serif);font-size:15px;color:var(--copper);font-weight:600;
+    display:flex;align-items:center;gap:12px;margin-bottom:18px;
+  }
+  .stap-num .line{flex:1;height:1px;background:rgba(41,76,82,.22);}
+  .stap h4{font-size:17px;margin:0 0 8px;}
+  .stap p{margin:0;font-size:14.5px;line-height:1.6;color:#4a5556;}
+
+  /* ---------- over peter ---------- */
+  .over{background:var(--main);padding:100px 0;color:var(--light);}
+  .over-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center;}
+  .over-photo{aspect-ratio:3/4;}
+  .over .eyebrow{color:var(--copper-soft);}
+  .over h2{color:var(--light);font-size:30px;max-width:16ch;}
+  .over p{font-size:16px;line-height:1.7;color:#d8e3e3;max-width:54ch;}
+  .over p + p{margin-top:16px;}
+  .over-creds{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+  .over-creds div{font-size:13px;color:#bcd0d0;border-left:2px solid var(--copper-soft);padding-left:12px;line-height:1.5;}
+
+  /* ---------- tarieven ---------- */
+  .tarieven{padding:96px 0;}
+  .tarieven-head{max-width:560px;}
+  .tarieven h2{font-size:32px;}
+  .prijs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;}
+  .prijs-card{
+    border:1px solid rgba(41,76,82,.16);padding:34px 28px;background:var(--light);
+  }
+  .prijs-card.highlight{border-color:var(--copper);position:relative;}
+  .prijs-card h4{font-family:var(--serif);font-size:18px;color:var(--main);margin:0 0 4px;font-weight:600;}
+  .prijs-card .bedrag{font-family:var(--serif);font-size:30px;color:var(--main);margin:14px 0 6px;}
+  .prijs-card .bedrag span{font-size:14px;color:#5a6566;font-family:var(--sans);}
+  .prijs-card p.desc{margin:10px 0 0;font-size:14px;color:#5a6566;line-height:1.55;}
+  .verg-note{margin-top:28px;font-size:13.5px;color:#5a6566;max-width:680px;line-height:1.6;}
+
+  /* ---------- afspraak ---------- */
+  .afspraak{background:var(--sand);padding:100px 0;}
+  .afspraak-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+  .afspraak h2{font-size:32px;max-width:14ch;}
+  .contact-list{display:grid;gap:18px;margin-top:30px;}
+  .contact-list .row{display:flex;gap:14px;font-size:15px;color:#3c4748;}
+  .contact-list .row b{color:var(--main);font-weight:600;min-width:90px;}
+  .wa-link{
+    display:inline-flex;align-items:center;gap:9px;margin-top:26px;
+    font-size:15px;font-weight:600;color:var(--main);
+    border-bottom:1px solid var(--copper);padding-bottom:6px;
+  }
+  .wa-link:hover{color:var(--copper);}
+  .form{background:var(--light);padding:36px;border:1px solid rgba(41,76,82,.14);}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--main);margin-bottom:6px;}
+  .field input,.field textarea{
+    width:100%;border:1px solid rgba(41,76,82,.25);background:var(--light);
+    padding:11px 12px;font-family:var(--sans);font-size:14.5px;color:var(--ink);border-radius:1px;
+  }
+  .field textarea{resize:none;height:90px;}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--main-dark);color:#aebdbd;padding:56px 0 28px;}
+  .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:40px;}
+  .footer-grid svg{height:30px;width:auto;margin-bottom:14px;}
+  .footer-grid p{font-size:13.5px;line-height:1.6;max-width:30ch;color:#9bacac;}
+  .footer-col h5{font-family:var(--sans);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#dfe7e7;margin:0 0 16px;}
+  .footer-col a{display:block;font-size:14px;color:#aebdbd;margin-bottom:10px;}
+  .footer-col a:hover{color:var(--copper-soft);}
+  .footer-bottom{
+    margin-top:48px;padding-top:24px;border-top:1px solid rgba(248,245,240,.1);
+    font-size:12.5px;color:#7e9090;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:980px){
+    .hero-grid,.uitleg-grid,.over-grid,.afspraak-grid{grid-template-columns:1fr;}
+    .hero-photo{order:-1;}
+    .klachten-grid{grid-template-columns:repeat(2,1fr);}
+    .stappen{grid-template-columns:repeat(2,1fr);gap:36px 0;}
+    .prijs-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;gap:32px;}
+    .nav-links{display:none;}
+    .nav-cta-desktop{display:none;}
+    .nav-toggle{display:flex;}
+    .hero h1{font-size:36px;}
+  }
+  @media (max-width:600px){
+    .klachten-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- shared mark symbol -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="radix-mark" viewBox="0 0 80 50">
+    <path d="M6,40 Q22,24 40,14" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M40,14 Q58,16 74,26" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="6" cy="40" r="5" fill="currentColor"/>
+    <circle cx="74" cy="26" r="5" fill="currentColor"/>
+    <circle cx="40" cy="14" r="7" fill="#A06D4E"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top">
+      <svg viewBox="0 0 415 170" style="height:34px;color:#294C52">
+        <use href="#radix-mark" x="0" y="60" width="80" height="50"/>
+        <text x="100" y="115" font-family="Lora,serif" font-size="64" fill="#294C52">radix</text>
+        <line x1="100" y1="132" x2="240" y2="132" stroke="#A06D4E" stroke-width="2"/>
+        <text x="100" y="155" font-family="Lora,serif" font-size="20" letter-spacing="3" fill="#294C52" opacity="0.82">OSTEOPATHIE</text>
+      </svg>
+    </a>
+    <nav class="nav-links">
+      <a href="#verhaal">Jouw verhaal</a>
+      <a href="#osteopathie">Osteopathie</a>
+      <a href="#klachten">Klachten</a>
+      <a href="#werkwijze">Werkwijze</a>
+      <a href="#over">Over Peter</a>
+      <a href="#tarieven">Tarieven</a>
+    </nav>
+    <a class="nav-cta nav-cta-desktop" href="#afspraak">Maak een afspraak</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu openen" aria-expanded="false" aria-controls="navMobile">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#294C52" stroke-width="1.8" stroke-linecap="round"><path d="M2 6h18"/><path d="M2 11h18"/><path d="M2 16h18"/></svg>
+    </button>
+  </div>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#verhaal">Jouw verhaal</a>
+    <a href="#osteopathie">Osteopathie</a>
+    <a href="#klachten">Klachten</a>
+    <a href="#werkwijze">Werkwijze</a>
+    <a href="#over">Over Peter</a>
+    <a href="#tarieven">Tarieven</a>
+    <a class="nav-cta" href="#afspraak">Maak een afspraak</a>
+  </div>
+</header>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navMobile = document.getElementById('navMobile');
+  navToggle.addEventListener('click', () => {
+    const open = navMobile.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navMobile.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <svg class="hero-watermark" viewBox="0 0 80 50" style="color:#294C52">
+      <use href="#radix-mark" width="80" height="50"/>
+    </svg>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Radix Osteopathie — Peter van de Ven</p>
+        <h1>Klachten begrijpen begint met goed luisteren.</h1>
+        <p class="lede">Veel klachten keren terug of worden onvoldoende verklaard vanuit de plek waar de pijn zich uit. Wij nemen de tijd om te onderzoeken wat er werkelijk speelt — en wat daarna echt helpt.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#afspraak">Maak een afspraak</a>
+          <a class="btn-ghost" href="#werkwijze">Ontdek hoe ik werk</a>
+        </div>
+      </div>
+      <div class="hero-photo photo-ph">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#294C52" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="12" cy="12" r="3.4"/><path d="M8 5l1.2-2h5.6L16 5"/></svg>
+        <span>Foto: gesprek tijdens het onderzoek, rustige praktijkruimte</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERKENNING / JOUW VERHAAL -->
+  <section class="herkenning" id="verhaal">
+    <div class="wrap">
+      <div class="herkenning-grid">
+        <div>
+          <p class="eyebrow">Jouw verhaal</p>
+          <h2>Herkent u zich hierin?</h2>
+          <p class="lede">Als dat zo is, bent u niet de eerste — en is er meestal wel een verklaring te vinden.</p>
+        </div>
+        <ul class="herk-list">
+          <li><span class="tick">—</span> U loopt al langere tijd met klachten die steeds terugkomen, ondanks eerdere behandelingen.</li>
+          <li><span class="tick">—</span> Onderzoeken laten weinig zien, maar de klacht is er onmiskenbaar nog steeds.</li>
+          <li><span class="tick">—</span> U wilt begrijpen waar de klacht vandaan komt, niet alleen dat hij even verdwijnt.</li>
+          <li><span class="tick">—</span> U bent bereid actief mee te werken aan herstel, in plaats van alleen behandeld te worden.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAT IS OSTEOPATHIE -->
+  <section class="uitleg" id="osteopathie">
+    <div class="wrap uitleg-grid">
+      <div>
+        <p class="eyebrow">Wat is osteopathie?</p>
+        <h2>Verder kijken dan de plek van de pijn.</h2>
+        <p class="lede">Tijdens het onderzoek kijken we niet alleen naar de plek van de klacht, maar naar de samenhang binnen het lichaam. Spieren, gewrichten en organen beïnvloeden elkaar — en dat verband is vaak de sleutel tot een blijvende verbetering.</p>
+      </div>
+      <div class="uitleg-points">
+        <div class="uitleg-point">
+          <svg class="icon" viewBox="0 0 80 50" style="color:#294C52"><use href="#radix-mark" width="80" height="50"/></svg>
+          <div>
+            <h4>Het lichaam als geheel</h4>
+            <p>Geen behandeling van losse klachten, maar onderzoek naar hoe functies elkaar beïnvloeden.</p>
+          </div>
+        </div>
+        <div class="uitleg-point">
+          <svg class="icon" viewBox="0 0 80 50" style="color:#294C52"><use href="#radix-mark" width="80" height="50"/></svg>
+          <div>
+            <h4>Een aanvulling, geen vervanging</h4>
+            <p>Osteopathie werkt naast reguliere zorg, niet als alternatief erbuiten.</p>
+          </div>
+        </div>
+        <div class="uitleg-point">
+          <svg class="icon" viewBox="0 0 80 50" style="color:#294C52"><use href="#radix-mark" width="80" height="50"/></svg>
+          <div>
+            <h4>Gericht op zelfredzaamheid</h4>
+            <p>Het doel is herstel — niet een herhaalde afhankelijkheid van behandelingen.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOOR WELKE KLACHTEN -->
+  <section class="klachten" id="klachten">
+    <div class="wrap">
+      <div class="klachten-head">
+        <p class="eyebrow">Voor welke klachten?</p>
+        <h2>Klachten waar osteopathie vaak verlichting bij kan bieden</h2>
+      </div>
+      <div class="klachten-grid">
+        <div class="klacht-item"><h4>Rug- en nekklachten</h4><p>Terugkerende spanning of pijn die niet vanzelf wegtrekt.</p></div>
+        <div class="klacht-item"><h4>Hoofdpijn &amp; migraine</h4><p>Klachten die vaak samenhangen met spanning in nek en kaak.</p></div>
+        <div class="klacht-item"><h4>Schouderklachten</h4><p>Bewegingsbeperking of pijn die terugkomt na fysiotherapie.</p></div>
+        <div class="klacht-item"><h4>Bekken- en rugklachten</h4><p>Onder andere rondom en na een zwangerschap.</p></div>
+        <div class="klacht-item"><h4>Spijsverteringsklachten</h4><p>Buikklachten die samenhangen met spanning of houding.</p></div>
+        <div class="klacht-item"><h4>Sportblessures</h4><p>Klachten die terugkomen zodra de belasting weer toeneemt.</p></div>
+      </div>
+      <p class="klachten-note">Deze lijst is niet uitputtend. Twijfelt u of osteopathie bij uw klacht kan helpen? Neem gerust contact op — tijdens het eerste consult bespreken we of een osteopathische aanpak passend is.</p>
+    </div>
+  </section>
+
+  <!-- WERKWIJZE -->
+  <section class="werkwijze" id="werkwijze">
+    <div class="wrap">
+      <div class="werkwijze-head">
+        <p class="eyebrow" style="text-align:center">Werkwijze</p>
+        <h2>Vier stappen naar een verklaring</h2>
+        <p class="lede">Begrijpen, behandelen, verbeteren — in die volgorde.</p>
+      </div>
+      <div class="stappen">
+        <div class="stap">
+          <div class="stap-num">01<span class="line"></span></div>
+          <h4>Intake &amp; gesprek</h4>
+          <p>We bespreken uw klachten, voorgeschiedenis en wat u tot nu toe heeft geprobeerd.</p>
+        </div>
+        <div class="stap">
+          <div class="stap-num">02<span class="line"></span></div>
+          <h4>Lichamelijk onderzoek</h4>
+          <p>Een grondige analyse van het functioneren van het lichaam als geheel.</p>
+        </div>
+        <div class="stap">
+          <div class="stap-num">03<span class="line"></span></div>
+          <h4>Behandeling</h4>
+          <p>Osteopathische technieken, gericht op de samenhang die we hebben gevonden.</p>
+        </div>
+        <div class="stap">
+          <div class="stap-num">04<span class="line"></span></div>
+          <h4>Vervolg</h4>
+          <p>Heldere uitleg en adviezen, gericht op herstel zonder onnodige afhankelijkheid.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVER PETER -->
+  <section class="over" id="over">
+    <div class="wrap over-grid">
+      <div class="over-photo photo-ph" style="background:linear-gradient(155deg,#33585e,#1d373c);border-color:rgba(248,245,240,.18)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E8DED0" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="12" cy="12" r="3.4"/><path d="M8 5l1.2-2h5.6L16 5"/></svg>
+        <span style="color:#cfdcdc">Foto: Peter van de Ven in de praktijk</span>
+      </div>
+      <div>
+        <p class="eyebrow">Over Peter van de Ven</p>
+        <h2>Van fysiotherapeut tot osteopaat — vanuit nieuwsgierigheid, niet vanuit een nieuwe trend.</h2>
+        <p>Na mijn afstuderen als fysiotherapeut in 2008 en later als manueel therapeut in 2014 behandelde ik dagelijks mensen met uiteenlopende klachten. Sommige daarvan bleven terugkomen, of waren onvoldoende te verklaren vanuit de plek waar de pijn zich bevond.</p>
+        <p>Die ervaring bracht mij bij de osteopathie: een opleiding aan het International Academy of Osteopathy, gecombineerd met een masteropleiding via Buckinghamshire New University. Vandaag combineer ik die achtergrond om klachten niet alleen te behandelen, maar vooral te helpen begrijpen.</p>
+        <div class="over-creds">
+          <div>Fysiotherapeut<br>sinds 2008</div>
+          <div>Manueel therapeut<br>sinds 2014</div>
+          <div>Osteopaat D.O.<br>IAO / Buckinghamshire New University</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARIEVEN -->
+  <section class="tarieven" id="tarieven">
+    <div class="wrap">
+      <div class="tarieven-head">
+        <p class="eyebrow">Tarieven</p>
+        <h2>Helder vooraf, geen verrassingen achteraf</h2>
+      </div>
+      <div class="prijs-grid">
+        <div class="prijs-card">
+          <h4>Eerste consult</h4>
+          <div class="bedrag">€ [bedrag] <span>incl. onderzoek</span></div>
+          <p class="desc">Uitgebreide intake, lichamelijk onderzoek en een eerste behandeling, circa [duur] minuten.</p>
+        </div>
+        <div class="prijs-card highlight">
+          <h4>Vervolgconsult</h4>
+          <div class="bedrag">€ [bedrag] <span>per behandeling</span></div>
+          <p class="desc">Behandeling op basis van de bevindingen uit het eerste consult, circa [duur] minuten.</p>
+        </div>
+        <div class="prijs-card">
+          <h4>Kinderen</h4>
+          <div class="bedrag">€ [bedrag] <span>per behandeling</span></div>
+          <p class="desc">Aangepast onderzoek en behandeling voor jonge patiënten.</p>
+        </div>
+      </div>
+      <p class="verg-note">Osteopathie wordt door de meeste zorgverzekeraars deels vergoed vanuit de aanvullende verzekering. Kijk in uw polisvoorwaarden of neem contact op met uw verzekeraar voor de exacte vergoeding.</p>
+    </div>
+  </section>
+
+  <!-- AFSPRAAK / CONTACT -->
+  <section class="afspraak" id="afspraak">
+    <div class="wrap afspraak-grid">
+      <div>
+        <p class="eyebrow">Afspraak maken</p>
+        <h2>Klaar om verder te kijken dan de klacht?</h2>
+        <p class="lede">Plan een eerste consult, of neem contact op als u eerst nog vragen heeft.</p>
+        <div class="contact-list">
+          <div class="row"><b>Adres</b> [Straatnaam] [huisnummer], [Postcode] [Plaats]</div>
+          <div class="row"><b>Telefoon</b> [Telefoonnummer]</div>
+          <div class="row"><b>E-mail</b> [E-mailadres]</div>
+          <div class="row"><b>Openingstijden</b> [dagen en tijden]</div>
+        </div>
+        <a class="wa-link" href="https://wa.me/31600000000" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Liever appen? Stuur een WhatsApp-bericht
+        </a>
+      </div>
+      <form class="form" onsubmit="return false;">
+        <div class="field"><label>Naam</label><input type="text" placeholder="Uw naam"></div>
+        <div class="field"><label>E-mailadres</label><input type="email" placeholder="naam@voorbeeld.nl"></div>
+        <div class="field"><label>Bericht</label><textarea placeholder="Waarmee kunnen we u helpen?"></textarea></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer;">Verstuur aanvraag</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <svg viewBox="0 0 200 150" style="height:84px;width:auto;color:#F8F5F0;margin-bottom:14px;">
+        <use href="#radix-mark" x="72" y="8" width="56" height="35"/>
+        <text x="100" y="92" font-family="Lora,serif" font-size="42" text-anchor="middle" fill="#F8F5F0">radix</text>
+        <line x1="62" y1="104" x2="138" y2="104" stroke="#C99A78" stroke-width="2"/>
+        <text x="100" y="124" font-family="Lora,serif" font-size="13" letter-spacing="2.5" text-anchor="middle" fill="#F8F5F0" opacity="0.85">OSTEOPATHIE</text>
+      </svg>
+      <p>Begrijpen. Behandelen. Verbeteren. Osteopathie vanuit een brede, grondige kijk op het lichaam.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Navigatie</h5>
+      <a href="#osteopathie">Osteopathie</a>
+      <a href="#klachten">Klachten</a>
+      <a href="#over">Over Peter</a>
+      <a href="#tarieven">Tarieven</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="#">[Straatnaam] [nr]</a>
+      <a href="#">[Postcode] [Plaats]</a>
+      <a href="#">[Telefoonnummer]</a>
+      <a href="#">[E-mailadres]</a>
+      <a href="https://wa.me/31600000000" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <div class="footer-col">
+      <h5>Praktisch</h5>
+      <a href="#afspraak">Afspraak maken</a>
+      <a href="#">Algemene voorwaarden</a>
+      <a href="#">Privacyverklaring</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© [jaar] Radix Osteopathie — Peter van de Ven</span>
+    <span>KvK [nummer] · AGB-code [nummer]</span>
+  </div>
+</footer>
+
+</body>
+</html>
