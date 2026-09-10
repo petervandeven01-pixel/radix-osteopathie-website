@@ -108,18 +108,14 @@
     width:46px;height:1px;background:var(--copper);border:none;margin:0;
   }
 
-  /* photo placeholder */
-  .photo-ph{
-    background:linear-gradient(155deg, var(--sand), #f1e9dd);
-    border:1px solid rgba(41,76,82,.12);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;color:var(--main);
-    gap:10px;
-    padding:24px;
+  /* Heldere fotografie zonder kaderlijn, met rustige afronding en diepte. */
+  .soft-photo{
+    position:relative;min-width:0;isolation:isolate;overflow:hidden;margin:0;
+    border-radius:14px;background:var(--light);
+    box-shadow:0 18px 42px rgba(41,76,82,.12);
   }
-  .photo-ph svg{opacity:.55;}
-  .photo-ph span{
-    font-family:var(--serif);font-style:italic;font-size:14px;color:#5a6e72;max-width:220px;
+  .soft-photo img{
+    width:100%;height:100%;object-fit:cover;
   }
 
   /* ---------- nav ---------- */
@@ -162,7 +158,7 @@
   /* ---------- hero ---------- */
   .hero{padding:88px 0 100px;overflow:hidden;}
   .hero-grid{
-    display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center;
+    display:grid;grid-template-columns:minmax(0,780px);justify-content:start;gap:64px;align-items:center;
   }
   .hero-watermark{
     position:absolute; top:34px; left:2px; width:152px; height:95px;
@@ -170,9 +166,6 @@
   }
   .hero-copy{position:relative;z-index:2;}
   .hero h1{font-size:46px;max-width:13ch;}
-  .hero-photo{
-    aspect-ratio:4/5; border-radius:2px; position:relative;z-index:2;
-  }
   .hero-actions{display:flex;align-items:center;gap:28px;margin-top:36px;flex-wrap:wrap;}
 
   /* ---------- herkenning ---------- */
@@ -192,13 +185,14 @@
 
   /* ---------- wat is osteopathie ---------- */
   .uitleg{padding:96px 0;}
-  .uitleg-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:64px;align-items:start;}
+  .uitleg-grid{display:grid;grid-template-columns:.78fr 1.22fr;gap:72px;align-items:start;}
   .uitleg h2{font-size:32px;max-width:14ch;}
-  .uitleg-points{display:grid;gap:28px;margin-top:8px;}
+  .uitleg-points{display:grid;gap:28px;margin-top:34px;}
   .uitleg-point{display:flex;gap:18px;}
   .uitleg-point .icon{flex:none;width:40px;height:40px;}
   .uitleg-point h4{font-family:var(--serif);color:var(--main);font-size:17px;margin:0 0 6px;font-weight:600;}
   .uitleg-point p{margin:0;font-size:15px;line-height:1.6;color:#4a5556;}
+  .uitleg-photo{aspect-ratio:2/3;width:100%;max-width:390px;justify-self:start;}
 
   /* ---------- klachten ---------- */
   .klachten{background:var(--sand);padding:96px 0;}
@@ -231,8 +225,9 @@
 
   /* ---------- over peter ---------- */
   .over{background:var(--main);padding:100px 0;color:var(--light);}
-  .over-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center;}
-  .over-photo{aspect-ratio:3/4;}
+  .over-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start;}
+  .over-photo{aspect-ratio:4/5;max-width:430px;}
+  .over .soft-photo{box-shadow:0 22px 48px rgba(12,30,34,.24);}
   .over .eyebrow{color:var(--copper-soft);}
   .over h2{color:var(--light);font-size:30px;max-width:16ch;}
   .over p{font-size:16px;line-height:1.7;color:#d8e3e3;max-width:54ch;}
@@ -273,6 +268,11 @@
   }
   .wa-link:hover{color:var(--copper);}
   .form{background:var(--light);padding:36px;border:1px solid rgba(41,76,82,.14);}
+  .visit-photo{aspect-ratio:16/9;margin:4px 0 18px;box-shadow:none;border-radius:10px;}
+  .visit-photo::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to bottom,transparent 68%,rgba(248,245,240,.32) 83%,var(--light) 100%);
+  }
   .field{margin-bottom:18px;}
   .field label{display:block;font-size:13px;font-weight:600;color:var(--main);margin-bottom:6px;}
   .field input,.field textarea{
@@ -472,9 +472,16 @@
   }
 
 
-/* Tijdelijke liveversie zonder foto’s */
-.hero-grid{grid-template-columns:minmax(0,780px);justify-content:start;}
-.over-grid{grid-template-columns:minmax(0,780px);justify-content:start;}
+@media (max-width:980px){
+  .uitleg-photo,.over-photo{width:min(100%,430px);margin-left:auto;margin-right:auto;}
+  .uitleg-photo{order:2;margin-top:36px;}
+  .uitleg-content{order:1;}
+}
+@media (max-width:600px){
+  .hero{padding-top:64px;}
+  .hero-grid{gap:42px;}
+  .soft-photo{border-radius:11px;}
+}
 </style>
 </head>
 <body>
@@ -572,11 +579,13 @@
 <!-- WAT IS OSTEOPATHIE -->
 <section class="uitleg" id="osteopathie">
 <div class="wrap uitleg-grid">
-<div>
+<figure class="uitleg-photo soft-photo">
+<img src="afbeeldingen/uitleg-bekkenmodel-radix.webp" alt="Peter van de Ven geeft uitleg aan de hand van een anatomisch bekkenmodel" width="933" height="1400" loading="lazy"/>
+</figure>
+<div class="uitleg-content">
 <p class="eyebrow">Osteopathie</p>
 <h2>Wat is osteopathie?</h2>
 <p class="lede">Misschien bent u al eerder behandeld of heeft u onderzoeken gehad, maar blijven uw klachten bestaan. In zo'n situatie kan het zinvol zijn om breder te kijken naar hoe het lichaam functioneert.</p>
-</div>
 <div class="uitleg-points">
 <div class="uitleg-point">
 <svg class="icon" style="color:#294C52" viewbox="0 0 80 50"><use height="50" href="#radix-mark" width="80"></use></svg>
@@ -600,7 +609,9 @@
 </div>
 </div>
 </div>
-<p style="margin-top:24px;"><a class="btn-ghost" href="patienteninformatie-osteopathie.html">Meer informatie over osteopathie</a></p></div>
+<p style="margin-top:24px;"><a class="btn-ghost" href="patienteninformatie-osteopathie.html">Meer informatie over osteopathie</a></p>
+</div>
+</div>
 </section>
 <!-- VOOR WELKE KLACHTEN -->
 <section class="klachten" id="klachten">
@@ -679,6 +690,9 @@
 <!-- OVER PETER -->
 <section class="over" id="over">
 <div class="wrap over-grid">
+<figure class="over-photo soft-photo">
+<img src="afbeeldingen/peter-van-de-ven-radix.webp" alt="Peter van de Ven, osteopaat bij Radix Osteopathie" width="1000" height="1250" loading="lazy"/>
+</figure>
 <div>
 <p class="eyebrow">Over mij</p>
 <h2>Peter van de Ven</h2>
@@ -772,6 +786,9 @@ Stuur een WhatsApp-bericht
 <div class="form">
 <p class="eyebrow">Uw bezoek</p>
 <h3 style="font-family:var(--serif);color:var(--main);font-size:22px;margin:0 0 20px;">Bij aankomst</h3>
+<figure class="visit-photo soft-photo">
+<img src="afbeeldingen/praktijkruimte-radix.webp" alt="Behandelkamer van Radix Osteopathie in Sint-Michielsgestel" width="1600" height="900" loading="lazy"/>
+</figure>
 <p style="font-size:14.5px;line-height:1.7;color:#4a5556;margin:0 0 16px;">U kunt gratis parkeren op de parkeerplaats bij Gezondheidscentrum Achter de Linden.</p>
 <p style="font-size:14.5px;line-height:1.7;color:#4a5556;margin:0 0 16px;">Radix Osteopathie is gevestigd binnen Praktijk Achter de Blauwe Deur, op de begane grond van het gezondheidscentrum.</p>
 <p style="font-size:14.5px;line-height:1.7;color:#4a5556;margin:0;">U kunt plaatsnemen in de wachtruimte van Praktijk Achter de Blauwe Deur. Ik kom u daar persoonlijk ophalen.</p>
