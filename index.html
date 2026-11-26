@@ -188,6 +188,7 @@
   }
   .nav-links a:hover{color:var(--copper);}
   .nav-cta{background:var(--main);color:var(--light);padding:10px 20px;font-size:14px;font-weight:600;border-radius:2px;}
+  .nav-cta{white-space:nowrap;}
   .nav-cta:hover{background:var(--main-dark);}
   .nav-toggle{
     display:none;background:none;border:none;padding:8px;margin:-8px;cursor:pointer;
@@ -201,9 +202,6 @@
   .nav-mobile a{
     padding:16px 32px;font-size:15.5px;font-weight:500;color:var(--main);
     border-bottom:1px solid rgba(41,76,82,.08);
-  }
-  .nav-mobile a.nav-cta{
-    margin:16px 32px;text-align:center;border-bottom:none;color:var(--light);
   }
   .nav-mobile.open{display:flex;}
 
@@ -418,11 +416,14 @@
     .prijs-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr 1fr;gap:32px;}
     .nav-links{display:none;}
-    .nav-cta-desktop{display:none;}
+    .nav-inner{gap:16px;}
+    .nav-cta{margin-left:auto;}
     .nav-toggle{display:flex;}
     .hero h1{font-size:36px;}
   }
   @media (max-width:600px){
+    .nav-inner{padding-inline:16px;gap:12px;}
+    .nav-cta{padding-inline:12px;}
     .klachten-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
     .reviews-grid,.artikel-grid{grid-template-columns:1fr;}
@@ -576,6 +577,7 @@
 <a href="#faq">Veelgestelde vragen</a>
 <a href="#tarieven">Tarieven</a>
 </nav>
+<a class="nav-cta" href="https://book.crossuite.app/00c236b6-f5ac-43f6-9b8e-8d1da84ddaf2" rel="noopener" target="_blank">Afspraak maken</a>
 <button aria-controls="navMobile" aria-expanded="false" aria-label="Menu openen" class="nav-toggle" id="navToggle">
 <svg fill="none" height="22" stroke="#294C52" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 22 22" width="22"><path d="M2 6h18"></path><path d="M2 11h18"></path><path d="M2 16h18"></path></svg>
 </button>
@@ -615,7 +617,6 @@
 <p style="margin:16px 0 0;color:#A06D4E;font-weight:600;">Peter van de Ven</p>
 <p><strong>Osteopathie in Sint-Michielsgestel en Vught.</strong> Iedere hulpvraag is anders. Daarom begint een behandeling voor mij met goed luisteren, een zorgvuldig onderzoek en een heldere uitleg van mijn bevindingen. Op basis daarvan bekijken we samen welke aanpak het beste aansluit bij uw situatie.</p>
 <div class="hero-actions">
-<a class="btn btn-primary" href="https://book.crossuite.app/00c236b6-f5ac-43f6-9b8e-8d1da84ddaf2" rel="noopener" target="_blank">Afspraak maken</a>
 <a class="btn-ghost" href="#werkwijze">Meer over mijn werkwijze</a>
 </div>
 <aside class="vught-note" aria-labelledby="vught-note-title">
